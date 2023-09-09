@@ -1,44 +1,10 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors
-
-import 'package:eco/contronllers/controller.dart';
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, unused_element
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-void main() => runApp(MaterialApp(home: Home()));
+import 'View/pageHome/home.dart';
 
-class Home extends StatelessWidget {
-  // variables
-  bool isUpcase = false;
+// global object for accessing device screen size
+late Size size;
 
-  // userInfo controller
-  final Controller _controller = Get.put(Controller());
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'count',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Nthach'),
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    isUpcase = !isUpcase;
-                    if (isUpcase) {
-                      _controller.convertUpperCase();
-                    } else {
-                      _controller.convetIsLowerCase();
-                    }
-                  },
-                  child: Obx(() =>
-                      Text('Name is ${_controller.userInfo.value.username}'))),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+void main() =>
+    runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Home()));

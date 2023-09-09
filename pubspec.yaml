@@ -39,6 +39,19 @@ dependencies:
   # get x 
   get: ^4.6.5
 
+  #http fetch api
+  http: ^0.13.6
+
+  # google font
+  google_fonts: ^4.0.4
+
+  # use for dropdown menu 
+  dropdown_button2: ^2.1.4
+
+  # for responsive apps
+  # responsive_sizer: ^3.2.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
