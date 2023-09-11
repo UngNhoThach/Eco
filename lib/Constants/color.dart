@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 
 class colors {
-  static const main_color = Color.fromRGBO(0, 104, 255, 1);
-  static const Color color_button = Color.fromRGBO(12, 61, 240, 1);
+  static const main_color = Color.fromRGBO(33, 150, 243, 1);
 
   // onboading color
   static const onBPage1Color = Colors.white;

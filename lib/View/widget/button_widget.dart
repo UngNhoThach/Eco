@@ -36,18 +36,22 @@ class ButtonWithText extends StatelessWidget {
 class ButtonTextWithIcon extends StatelessWidget {
   final String buttonText;
   final VoidCallback onPressed;
+  final double? width;
+  final double? height;
 
   const ButtonTextWithIcon({
     Key? key,
     required this.buttonText,
     required this.onPressed,
+    required this.height,
+    required this.width,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 112,
-      width: 36,
+      height: height,
+      width: width,
       child: ElevatedButton(
         onPressed: onPressed,
         child: Text(
@@ -63,10 +67,14 @@ class ButtonTextWithIcon extends StatelessWidget {
 class ButtonNoIcon extends StatelessWidget {
   final double? width;
   final double? height;
+  final double? circular;
+
   final String text;
   final VoidCallback onPressed;
   final Color hoverColor;
   final Color focusColor;
+  final Color mainColor;
+  final Color textColor;
 
   const ButtonNoIcon({
     Key? key,
@@ -74,6 +82,9 @@ class ButtonNoIcon extends StatelessWidget {
     required this.height,
     required this.text,
     required this.onPressed,
+    required this.mainColor,
+    required this.circular,
+    required this.textColor,
     this.hoverColor = Colors.indigo,
     this.focusColor = Colors.red,
   }) : super(key: key);
@@ -94,13 +105,12 @@ class ButtonNoIcon extends StatelessWidget {
               if (states.contains(MaterialState.focused)) {
                 return focusColor;
               }
-              return colors
-                  .main_color; // Màu mặc định khi không hover hoặc focus
+              return mainColor; // Màu mặc định khi không hover hoặc focus
             },
           ),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30.0)),
+              borderRadius: BorderRadius.all(Radius.circular(circular ?? 30)),
             ),
           ),
         ),
@@ -112,7 +122,7 @@ class ButtonNoIcon extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white)),
+                    color: textColor)),
           ],
         ),
       ),

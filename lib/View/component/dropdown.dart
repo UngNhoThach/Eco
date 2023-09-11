@@ -4,13 +4,15 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:eco/viewModel/dropdown_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../../main.dart';
-import '../../viewModel/checkbox_controller.dart';
+import '../../Constants/color.dart';
 import '../widget/dropdown_widget.dart';
 
 class dropdown extends StatelessWidget {
   dropdown({super.key});
+
+  String? selectedValue;
+  final TextEditingController textEditingController = TextEditingController();
 
 // check box controller
   final dropdownController _dropdownController = Get.put(dropdownController());
@@ -78,32 +80,39 @@ class dropdown extends StatelessWidget {
                       onChanged: (_) {},
                     ),
 
+                    // spacing
+                    SizedBox(
+                      height: 20,
+                    ),
+
                     // drop down list use framwork
                     DropdownButtonHideUnderline(
                       child: DropdownButton2<String>(
                         isExpanded: true,
-                        hint: Row(
-                          children: [
-                            Icon(
-                              Icons.list,
-                              size: 16,
-                              color: Colors.yellow,
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Select Item',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.yellow,
-                                ),
-                                overflow: TextOverflow.ellipsis,
+                        hint: Container(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.list,
+                                size: 16,
+                                color: Colors.white,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'Select Item',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         items: items
                             .map((String item) => DropdownMenuItem<String>(
@@ -130,7 +139,7 @@ class dropdown extends StatelessWidget {
                             border: Border.all(
                               color: Colors.black26,
                             ),
-                            color: Colors.redAccent,
+                            color: colors.main_color,
                           ),
                           elevation: 2,
                         ),
@@ -147,7 +156,7 @@ class dropdown extends StatelessWidget {
                           width: 200,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(14),
-                            color: Colors.redAccent,
+                            color: colors.main_color,
                           ),
                           offset: const Offset(-20, 0),
                           scrollbarTheme: ScrollbarThemeData(
@@ -163,6 +172,102 @@ class dropdown extends StatelessWidget {
                         ),
                       ),
                     ),
+
+                    // spacing
+                    SizedBox(
+                      height: 20,
+                    ),
+
+                    // drop down list with search use framwork
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2<String>(
+                        isExpanded: true,
+                        hint: SizedBox(
+                          width: 200,
+                          child: Text(
+                            'Select Item',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: items
+                            .map((item) => DropdownMenuItem(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedValue,
+                        onChanged: (value) {},
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          height: 40,
+                          width: 200,
+                        ),
+                        dropdownStyleData: const DropdownStyleData(
+                          maxHeight: 200,
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                        ),
+                        dropdownSearchData: DropdownSearchData(
+                          searchController: textEditingController,
+                          searchInnerWidgetHeight: 50,
+                          searchInnerWidget: Container(
+                            height: 50,
+                            padding: const EdgeInsets.only(
+                              top: 8,
+                              bottom: 4,
+                              right: 8,
+                              left: 8,
+                            ),
+                            child: TextFormField(
+                              expands: true,
+                              maxLines: null,
+                              controller: textEditingController,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 8,
+                                ),
+                                hintText: 'Search for an item...',
+                                hintStyle: const TextStyle(fontSize: 12),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                          searchMatchFn: (item, searchValue) {
+                            return item.value.toString().contains(searchValue);
+                          },
+                        ),
+                        //This to clear the search value when you close the menu
+                        onMenuStateChange: (isOpen) {
+                          if (!isOpen) {
+                            textEditingController.clear();
+                          }
+                        },
+                      ),
+                    ),
+
+                    // spacing
+                    SizedBox(
+                      height: 20,
+                    ),
+
+                    // drop down list custom menu
+                    DropdownCountryBox(
+                      'Pick your country',
+                      callBack: (String value) {},
+                    )
                   ],
                 ),
               ),

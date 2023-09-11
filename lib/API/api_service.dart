@@ -1,11 +1,8 @@
 // ignore_for_file: camel_case_types, avoid_print, body_might_complete_normally_nullable
 
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
-
-import '../Model/province_model.dart';
 
 class apiService {
   static Future<http.Response?> apiProvinces() async {

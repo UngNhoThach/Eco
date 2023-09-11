@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, no_leading_underscores_for_local_identifiers
+// ignore_for_file: camel_case_types, no_leading_underscores_for_local_identifiers, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 

@@ -1,12 +1,12 @@
-// ignore_for_file: avoid_unnecessary_containers, camel_case_types
+// ignore_for_file: avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
 import '../widget/radio_bottom_widget.dart';
 
-class radiobutton extends StatelessWidget {
-  const radiobutton({super.key});
+class ShareExit extends StatelessWidget {
+  const ShareExit({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class radiobutton extends StatelessWidget {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: AppBar(
-            title: Text('radiobutton'.toUpperCase()),
+            title: Text('ShareExit'.toUpperCase()),
             centerTitle: true,
           ),
           body: SingleChildScrollView(
@@ -26,7 +26,7 @@ class radiobutton extends StatelessWidget {
                   // space
                   SizedBox(height: size.height / 30),
                   CustomRadioButton(
-                    label: 'Radio button',
+                    label: 'ShareExit',
                     onChanged: (bool? value) {},
                     value: true,
                   ),

@@ -1,6 +1,8 @@
 // ignore_for_file: unused_local_variable, unused_element
 
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:eco/Model/province_model.dart';
 import 'package:get/get.dart';
@@ -24,19 +26,27 @@ class ProvinceController extends GetxController {
 
   // fetch province data
   Future<void> fetchProvinceData() async {
-    const String userUrl = "https://provinces.open-api.vn/api/?depth=3";
-    final response = await http.get(Uri.parse(userUrl));
-    if (response.statusCode == 200) {
-      final List result = json.decode(utf8.decode(response.bodyBytes));
+    // check conection internet
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        log('connected');
 
-      provinceList.value =
-          result.map((e) => ProvinceModel.fromJson(e)).toList();
-
-      isLoading.value = false;
-      update();
-    } else {
-      Get.snackbar('Error Loading data!',
-          'Sever responded: ${response.statusCode}:${response.reasonPhrase.toString()}');
+        const String userUrl = "https://provinces.open-api.vn/api/?depth=3";
+        final response = await http.get(Uri.parse(userUrl));
+        if (response.statusCode == 200) {
+          final List result = json.decode(utf8.decode(response.bodyBytes));
+          provinceList.value =
+              result.map((e) => ProvinceModel.fromJson(e)).toList();
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar('Error Loading data!',
+              'Sever responded: ${response.statusCode}:${response.reasonPhrase.toString()}');
+        }
+      }
+    } on SocketException catch (_) {
+      log('not connected');
     }
   }
 

@@ -1,99 +1,254 @@
-// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, prefer_const_constructors_in_immutables, prefer_const_constructors
-
-import 'dart:developer';
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 
-class CustomDropdownMenu extends StatefulWidget {
-  final List<String> items;
-  final String selectedItem;
-  final ValueChanged<String?> onChanged;
+class DropdownCountryBox extends StatefulWidget {
+  final String country;
+  ValueSetter<String> callBack;
 
-  CustomDropdownMenu({
-    required this.items,
-    required this.selectedItem,
-    required this.onChanged,
-  });
+  DropdownCountryBox(this.country, {Key? key, required this.callBack})
+      : super(key: key);
 
   @override
-  _CustomDropdownMenuState createState() => _CustomDropdownMenuState();
+  _DropdownCountryBoxState createState() => _DropdownCountryBoxState();
 }
 
-class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
+class _DropdownCountryBoxState extends State<DropdownCountryBox> {
+  // global key
+  GlobalKey? _globalKey;
+  // for position
+  double height = 0, width = 0, xPosition = 0, yPosition = 0;
+  bool isDropdownOpened = false;
+  OverlayEntry? floatingDropdown;
+
+  @override
+  void initState() {
+    _globalKey = LabeledGlobalKey(widget.country);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: widget.selectedItem,
-      onChanged: widget.onChanged,
-      items: widget.items.map((String item) {
-        return DropdownMenuItem<String>(
-          value: item,
-          child: Text(item),
-        );
-      }).toList(),
+    return GestureDetector(
+        key: _globalKey,
+        onTap: () {
+          setState(() {
+            if (isDropdownOpened) {
+              floatingDropdown?.remove();
+            } else {
+              // position for list items
+              findDropdownPosition();
+              floatingDropdown = _createFloatingDropdown();
+              Overlay.of(context).insert(floatingDropdown!);
+            }
+            isDropdownOpened = !isDropdownOpened;
+          });
+        },
+        child: _createHeader());
+  }
+
+  // position for list items
+  void findDropdownPosition() {
+    RenderBox? renderBox =
+        _globalKey?.currentContext?.findRenderObject() as RenderBox?;
+    height = renderBox?.size.height ?? 0;
+    width = renderBox?.size.width ?? 0;
+    Offset? offset = renderBox?.localToGlobal(Offset.zero);
+    xPosition = offset?.dx ?? 0;
+    yPosition = offset?.dy ?? 0;
+  }
+
+  OverlayEntry _createFloatingDropdown() {
+    return OverlayEntry(builder: (context) {
+      return Stack(
+        children: [
+          //For tap outside overlay to dismiss
+          Positioned.fill(
+              child: GestureDetector(
+            onTap: () {
+              floatingDropdown?.remove();
+              isDropdownOpened = !isDropdownOpened;
+            },
+            child: Container(
+              color: Colors.transparent,
+            ),
+          )),
+          //position of Overlay
+          Positioned(
+            width: MediaQuery.of(context).size.width,
+            top: yPosition + height,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: DropDown(
+                itemHeight: height,
+                selectedItem: widget.country,
+                callBack: (value) => {hideDropdown(), widget.callBack(value)},
+              ),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  void hideDropdown() {
+    floatingDropdown?.remove();
+    isDropdownOpened = !isDropdownOpened;
+  }
+
+  Widget _createHeader() {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.red,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 0.1,
+                offset: const Offset(0, 0.1)),
+          ],
+          borderRadius: BorderRadius.circular(8)),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Spacer(),
+          Text(
+            widget.country,
+            style: const TextStyle(color: Colors.black, fontSize: 14),
+          ),
+          const Spacer(),
+          const Icon(Icons.arrow_drop_down),
+        ],
+      ),
     );
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(
-        title: Text('Custom Dropdown Menu'),
-      ),
-      body: Center(
-        child: CustomDropdownMenu(
-          items: ['Option 1', 'Option 2', 'Option 3'],
-          selectedItem: 'Option 1',
-          onChanged: (String? newValue) {
-            // Xử lý sự kiện khi mục được chọn thay đổi
-            log('Selected: $newValue');
-          },
-        ),
-      ),
-    ),
-  ));
-}
+class DropDown extends StatelessWidget {
+  // height of the item in list
+  final double itemHeight;
 
-class CustomDropdownButton extends StatelessWidget {
-  final double? width;
-  final double? height;
-  final String selectedValue;
-  final List<String> items;
-  final ValueChanged<String?> onChanged;
+  // item selected
+  final String selectedItem;
 
-  CustomDropdownButton({
-    required this.width,
-    required this.height,
-    required this.selectedValue,
-    required this.items,
-    required this.onChanged,
-  });
+  // call back when selected item
+  ValueSetter<String> callBack;
+
+  // list items country
+  List<String> dropCountryData = <String>[
+    'VietNam',
+    'ThaiLan',
+    'Campuchia',
+    'Indo',
+    'Sing',
+    'Lao',
+    'Japan',
+  ];
+
+  DropDown(
+      {Key? key,
+      required this.itemHeight,
+      required this.selectedItem,
+      required this.callBack})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black), // Tùy chỉnh border
-        borderRadius: BorderRadius.circular(4.0), // Tùy chỉnh góc bo tròn
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: DropdownButton<String>(
-          value: selectedValue,
-          onChanged: onChanged,
-          underline: SizedBox(), // Loại bỏ underline mặc định
-          icon: Icon(Icons.arrow_drop_down), // Icon dropdown
-          iconSize: 24.0,
-          isExpanded: true,
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
+    return Column(
+      children: <Widget>[
+        Material(
+          color: Colors.grey[300],
+          child: Container(
+            height: dropCountryData.length * itemHeight + 5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    blurRadius: 0.1,
+                    offset: const Offset(0, 0.1)),
+              ],
+            ),
+            child: Column(
+              children: <Widget>[
+                DropDownItem(
+                    text: dropCountryData[0],
+                    isSelected: selectedItem == dropCountryData[0],
+                    callBack: callBack,
+                    isFirstItem: true),
+                // DropDownItem(
+                //     text: dropCountryData[0],
+                //     isSelected: selectedItem == dropCountryData[0],
+                //     callBack: callBack,
+                //     isFirstItem: true),
+                DropDownItem(
+                  text: dropCountryData[1],
+                  isSelected: selectedItem == dropCountryData[1],
+                  callBack: callBack,
+                ),
+                DropDownItem(
+                  text: dropCountryData[2],
+                  isSelected: selectedItem == dropCountryData[2],
+                  callBack: callBack,
+                ),
+                DropDownItem(
+                  text: dropCountryData[3],
+                  isSelected: selectedItem == dropCountryData[3],
+                  callBack: callBack,
+                ),
+                DropDownItem(
+                    text: dropCountryData[4],
+                    isSelected: selectedItem == dropCountryData[4],
+                    callBack: callBack,
+                    isLastItem: true),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DropDownItem extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final bool isFirstItem;
+  final bool isLastItem;
+  ValueSetter<String> callBack;
+
+  DropDownItem(
+      {super.key,
+      required this.text,
+      this.isSelected = false,
+      this.isFirstItem = false,
+      this.isLastItem = false,
+      required this.callBack});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        //return value
+        callBack(text);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          color: isSelected ? Colors.amber : Colors.blue,
+          // gradient: isSelected
+          //     ? Color.fromARGB(255, 218, 112, 104)
+          //     :  LinearGradient(colors: [Colors.white, Colors.white]),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            text,
+            style: TextStyle(
+                color: isSelected ? Colors.white : Colors.amber, fontSize: 14),
+          ),
         ),
       ),
     );

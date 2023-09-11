@@ -34,10 +34,13 @@ class _buttonNoIconState extends State<buttonNoIcon> {
                     // space
                     SizedBox(height: size.height / 30),
                     ButtonNoIcon(
+                      circular: null,
+                      mainColor: colors.main_color,
                       onPressed: () {},
                       text: 'Default button no icon',
                       width: null,
                       height: 56,
+                      textColor: Colors.white,
                     ),
                     // space
                     SizedBox(height: size.height / 30),
@@ -66,6 +69,9 @@ class _buttonNoIconState extends State<buttonNoIcon> {
                       text: 'No icon small',
                       width: size.width / 2,
                       height: 56,
+                      circular: null,
+                      mainColor: colors.main_color,
+                      textColor: Colors.white,
                     ),
                     // space
                     SizedBox(height: size.height / 30),

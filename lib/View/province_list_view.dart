@@ -2,10 +2,11 @@
 
 import 'dart:developer';
 
+import 'package:eco/View/widget/button_widget.dart';
 import 'package:eco/viewModel/province_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../Constants/color.dart';
 import 'district_list_view.dart';
 
 class province_list_view extends StatelessWidget {
@@ -58,7 +59,12 @@ class province_list_view extends StatelessWidget {
                                 alignment: Alignment.centerRight,
                                 child: IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.navigate_next_rounded)),
+                                    icon: Icon(
+                                      Icons.navigate_next_rounded,
+                                      color: Color.fromARGB(255, 193, 193, 193),
+                                      weight:
+                                          0.9, // Màu xám hoặc màu khác có độ mờ
+                                    )),
                               ),
                             ),
                           ],
@@ -109,7 +115,7 @@ class province_list_view extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         border: Border(
                                           bottom: BorderSide(
-                                              width: 1.0, color: Colors.grey),
+                                              width: 0.5, color: Colors.grey),
                                         ),
                                       ),
                                       child: Row(
@@ -134,8 +140,13 @@ class province_list_view extends StatelessWidget {
                                               alignment: Alignment.centerRight,
                                               child: IconButton(
                                                   onPressed: () {},
-                                                  icon: Icon(Icons
-                                                      .navigate_next_rounded)),
+                                                  icon: Icon(
+                                                    Icons.navigate_next_rounded,
+                                                    color: Color.fromARGB(
+                                                        255, 193, 193, 193),
+                                                    weight:
+                                                        0.9, // Màu xám hoặc màu khác có độ mờ
+                                                  )),
                                             ),
                                           ),
                                         ],
@@ -164,23 +175,14 @@ class province_list_view extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  width: 180,
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Center(
-                                    child: Text('Lọc theo khu vực ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black,
-                                            fontSize: 16)),
-                                  ),
-                                ),
+                              ButtonNoIcon(
+                                circular: 5,
+                                mainColor: Color.fromARGB(255, 224, 224, 224),
+                                onPressed: () {},
+                                text: 'Lọc theo khu vực',
+                                width: 180,
+                                height: 36,
+                                textColor: Colors.black,
                               ),
                               Text('Thành phố Hà Nội',
                                   style: TextStyle(
@@ -197,27 +199,14 @@ class province_list_view extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                width: 380,
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.amber[800],
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Áp dụng (1)'.toUpperCase(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      wordSpacing: 2,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            ButtonNoIcon(
+                              circular: 5,
+                              mainColor: colors.main_color,
+                              onPressed: () {},
+                              text: 'Áp dụng (1)'.toUpperCase(),
+                              width: 380,
+                              height: 56,
+                              textColor: Colors.white,
                             ),
                           ],
                         )
